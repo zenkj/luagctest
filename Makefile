@@ -11,6 +11,7 @@ $(LUADIR)/src/liblua.a: lib/lua-5.2.3.tar.gz
 callgrind: $(EXES:%=result/%.callgrind)
 
 $(EXES:%=result/%.callgrind): result/%.callgrind: %
+	mkdir -p result
 	valgrind --tool=callgrind --callgrind-out-file=$@ ./$<
 
 annotate: $(EXES:%=result/%.callgrind.annotate)
@@ -21,4 +22,4 @@ $(EXES:%=result/%.callgrind.annotate): %.annotate: %
 	callgrind_annotate --inclusive=no $< >$@.exclusive
 
 clean: 
-	rm -rf $(LUADIR) result/* $(EXES)
+	rm -rf $(LUADIR) result $(EXES)
