@@ -20,6 +20,11 @@ $(EXES:%=result/%.callgrind.annotate): %.annotate: %
 	callgrind_annotate --tree=calling $< >$@.calling
 	callgrind_annotate --inclusive=yes $< >$@.inclusive
 	callgrind_annotate --inclusive=no $< >$@.exclusive
+	
+dot: $(EXES:%=result/%.dot)
+
+$(EXES:%=result/%.dot): %.dot: %.callgrind
+	./gprof2dot.py -n0 -e0 -f callgrind -o $< $@
 
 clean: 
 	rm -rf $(LUADIR) result $(EXES)
